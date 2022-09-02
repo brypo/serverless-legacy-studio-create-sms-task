@@ -10,10 +10,12 @@ exports.handler = async function(context, event, callback) {
     // get SIDs from studio widget
     const { instanceSid, channelSid, webhookSid, customerName } = event;
     console.log(event);
+    
+    let taskSid;
 
     // create sms Task
     try {
-        await client.taskrouter.v1.workspaces(context.TR_WORKSPACE_SID)
+        let task = await client.taskrouter.v1.workspaces(context.TR_WORKSPACE_SID)
             .tasks
             .create({
                 attributes: JSON.stringify({
@@ -24,6 +26,8 @@ exports.handler = async function(context, event, callback) {
                 taskChannel: 'sms'
             })
             .then(task => console.log(`Created Task: ${task.sid}`));
+        
+        taskSid = task.sid;
     }
     catch(e) {
         console.log(`Task failed to create: ${instanceSid} ${channelSid} ${webhookSid}`);
@@ -44,6 +48,32 @@ exports.handler = async function(context, event, callback) {
         console.error(e);
         response.setStatusCode(500);
         return callback(null, response)
+    }
+    
+    
+    // add taskSid to chat channel attributes
+    try {
+        // get current channel
+        let channel = await client.chat.v2.services(instanceSid)
+            .channels(channelSid)
+            .fetch();
+        let newAttr = JSON.parse(channel.attributes);
+
+        // add taskSid
+        newAttr.taskSid = taskSid;
+
+        // update chat channel with new attributes
+        await client.chat.v2.services(instanceSid)
+            .channels(channel.sid)
+            .update({ attributes: JSON.stringify(newAttr) });
+
+        console.log(`chat channel ${channelSid} updated with ${taskSid}`);
+    }
+    catch(e) {
+        console.log(`Chat channel ${channelSid} failed to update to with ${taskSid}`);
+        console.error(e);
+        response.setStatusCode(500);
+        return callback(null, response);
     }
 
     return callback(null, response)
