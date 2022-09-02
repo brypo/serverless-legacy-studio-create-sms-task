@@ -1,5 +1,6 @@
-# serverless-send-to-flex-sms
-Twilio Serverless Function mimic for Studio SendToFlex Widget
+# Twilio Serverless Function - SendToFlex
+
+Twilio Serverless Function mimic for **Studio *SendToFlex* Widget**
 
 
 ## environment variables
