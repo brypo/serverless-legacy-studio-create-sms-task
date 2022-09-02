@@ -6,7 +6,7 @@ Twilio Serverless Function mimic for **Studio *SendToFlex* Widget**
 
 ## environment variables
 | Variable | Resource |
-----
+| ---- | ---- | 
 | TR_WORKSPACE_SID | TaskRouter Workspace SID 
 | TR_WORKFLOW_SID | TaskRouter SMS Workflow SID
 
@@ -14,8 +14,8 @@ Twilio Serverless Function mimic for **Studio *SendToFlex* Widget**
 ## studio configuration
 In the `Run Function` Widget from the Studio Flow, pass the following key/value pairs to the Serverless Function:
 
-| Variable | Studio Reference
------
+| Variable | Studio Reference |
+| ----- | ---- |
 | Chat Channel SID | {{trigger.message.ChannelSid}}
 | Chat Service SID | {{trigger.message.InstanceSid}}
 | Chat Channel Webhook SID | {{trigger.message.WebhookSid}}
