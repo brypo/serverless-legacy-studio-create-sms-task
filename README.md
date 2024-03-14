@@ -3,9 +3,9 @@
 Twilio Serverless Function mimic for **Legacy Progammable Chat/Proxy Studio *SendToFlex* Widget**
 
 This code performs 3 actions:
-1. Creates a TaskRouter Task
-2. Deletes the Chat Channel Webhook associated to Studio
-3. Updates the Chat Channel `attributes` with the Task SID created
+1. [Creates a TaskRouter Task](https://www.twilio.com/docs/taskrouter/api/task#create-a-task-resource)
+2. [Deletes the Chat Channel Webhook](https://twilio.com/docs/chat/rest/channel-webhook-resource#delete-a-channelwebhook-resource) associated to Studio
+3. [Updates the Chat Channel](https://www.twilio.com/docs/chat/rest/channel-resource#update-a-channel-resource) `attributes` with the Task SID created
 
 
 ## environment variables
