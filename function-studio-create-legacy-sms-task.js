@@ -1,22 +1,22 @@
 exports.handler = async function (context, event, callback) {
     //get twilio client
-    const client = context.getTwilioClient();
+    const client = context.getTwilioClient()
 
     // set up response
-    const response = new Twilio.Response();
+    const response = new Twilio.Response()
 
     // get SIDs from studio widget payload
-    const { instanceSid, channelSid, webhookSid, customerName } = event;
+    const { instanceSid, channelSid, webhookSid, customerName } = event
 
     try {
         // create sms Task
-        let taskSid = await createSMSTask(channelSid, customerName, context.WORKSPACE_SID, context.WORKFLOWSID)
+        let taskSid = await createSMSTask(client, channelSid, customerName, context.WORKSPACE_SID, context.WORKFLOWSID)
 
         // delete studio<->chat channel webhook
-        await deleteWebhook(channelSid, instanceSid, webhookSid)
+        await deleteWebhook(client, channelSid, instanceSid, webhookSid)
 
         // add taskSid to chat channel attributes
-        await updateChannelAttributes(channelSid, instanceSid, taskSid)
+        await updateChannelAttributes(client, channelSid, instanceSid, taskSid)
     } catch (e) {
         console.error(e)
         response.setBody(JSON.stringify(e))
@@ -38,12 +38,12 @@ const createSMSTask = async (client, channelSid, customerName, workspaceSid, wor
                 }), workflowSid: context.TR_WORKFLOW_SID,
                 taskChannel: 'sms'
             })
-            .then(task => console.log(`Created Task: ${task.sid}`));
+            .then(task => console.log(`Created Task: ${task.sid}`))
 
         return task.sid
     }
     catch (e) {
-        console.error(`Task failed to create: ${channelSid} ${customerName}`);
+        console.error(`Task failed to create: ${channelSid} ${customerName}`)
         throw new Error(JSON.stringify(e))
     }
 }
@@ -53,7 +53,7 @@ const deleteWebhook = async (client, channelSid, instanceSid, webhookSid) => {
         await client.chat.v2.services(instanceSid)
             .channels(channelSid)
             .webhooks(webhookSid)
-            .remove();
+            .remove()
     }
     catch (e) {
         console.error(`Chat Channel Webhook for Studio Flow failed to delete: ${channelSid} ${webhookSid}`);
@@ -67,10 +67,10 @@ const updateChannelAttributes = async (client, channelSid, instanceSid, taskSid)
         let channel = await client.chat.v2.services(instanceSid)
             .channels(channelSid)
             .fetch();
-        let newAttr = JSON.parse(channel.attributes);
+        let newAttr = JSON.parse(channel.attributes)
 
         // add taskSid to new attributes
-        newAttr.taskSid = taskSid;
+        newAttr.taskSid = taskSid
 
         // update chat channel with new attributes
         await client.chat.v2.services(instanceSid)
