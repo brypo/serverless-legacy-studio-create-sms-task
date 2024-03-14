@@ -1,6 +1,6 @@
-# Twilio Serverless Function - SendToFlex
+# Twilio Serverless Function - Legacy SendToFlex SMS
 
-Twilio Serverless Function mimic for **Studio *SendToFlex* Widget**
+Twilio Serverless Function mimic for **Legacy Progammable Chat/Proxy Studio *SendToFlex* Widget**
 
 This code performs 3 actions:
 1. Creates a TaskRouter Task
@@ -11,8 +11,8 @@ This code performs 3 actions:
 ## environment variables
 | Variable | Resource |
 | ---- | ---- | 
-| TR_WORKSPACE_SID | TaskRouter Workspace SID 
-| TR_WORKFLOW_SID | TaskRouter SMS Workflow SID
+| WORKSPACE_SID | TaskRouter Workspace SID 
+| WORKFLOW_SID | TaskRouter SMS Workflow SID
 
 
 ## studio configuration
