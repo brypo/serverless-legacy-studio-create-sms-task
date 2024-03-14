@@ -17,15 +17,16 @@ exports.handler = async function (context, event, callback) {
 
         // add taskSid to chat channel attributes
         await updateChannelAttributes(channelSid, instanceSid, taskSid)
-
-        return callback(null, response)
     } catch (e) {
         console.error(e)
-        throw new Error(JSON.stringify(e))
+        response.setBody(JSON.stringify(e))
+        response.setStatusCode(500)
     }
+
+    return callback(null, response)
 };
 
-const createSMSTask = async (channelSid, customerName, workspaceSid, workflowSid) => {
+const createSMSTask = async (client, channelSid, customerName, workspaceSid, workflowSid) => {
     try {
         let task = await client.taskrouter.v1.workspaces(workspaceSid)
             .tasks
@@ -47,7 +48,7 @@ const createSMSTask = async (channelSid, customerName, workspaceSid, workflowSid
     }
 }
 
-const deleteWebhook = async (channelSid, instanceSid, webhookSid) => {
+const deleteWebhook = async (client, channelSid, instanceSid, webhookSid) => {
     try {
         await client.chat.v2.services(instanceSid)
             .channels(channelSid)
@@ -60,7 +61,7 @@ const deleteWebhook = async (channelSid, instanceSid, webhookSid) => {
     }
 }
 
-const updateChannelAttributes = async (channelSid, instanceSid, taskSid) => {
+const updateChannelAttributes = async (client, channelSid, instanceSid, taskSid) => {
     try {
         // get current channel
         let channel = await client.chat.v2.services(instanceSid)
